@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe | X vs O</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="game-container">
+
+        <p class="eyebrow">THE CLASSIC GAME</p>
+        <h1>Tic Tac <span>Toe!</span></h1>
+        <p class="subtitle">Two players. One board. Who will win?</p>
+
+        <section class="player-info">
+            <div class="player x-player {% if not winner and not draw and current_player == 'X' %}active{% endif %}">
+                <span class="symbol">X</span>
+                <span>Player One</span>
+            </div>
+
+            <div class="player o-player {% if not winner and not draw and current_player == 'O' %}active{% endif %}">
+                <span class="symbol">O</span>
+                <span>Player Two</span>
+            </div>
+        </section>
+
+        <div class="status" aria-live="polite">
+            {% if winner %}
+                🎉 Player {{ winner }} wins!
+            {% elif draw %}
+                🤝 It's a draw!
+            {% else %}
+                Your turn: <strong>{{ current_player }}</strong>
+            {% endif %}
+        </div>
+
+        <form method="POST" class="board">
+            {% for cell in board %}
+                <button
+                    type="submit"
+                    name="position"
+                    value="{{ loop.index0 }}"
+                    class="cell {% if cell == 'X' %}cell-x{% elif cell == 'O' %}cell-o{% endif %}"
+                    {% if cell or winner or draw %}disabled{% endif %}
+                    aria-label="Cell {{ loop.index }}">
+                    {{ cell }}
+                </button>
+            {% endfor %}
+        </form>
+
+        <form method="POST">
+            <button class="reset-button"
+                    type="submit"
+                    name="action"
+                    value="reset">
+                ↻ &nbsp; Play Again
+            </button>
+        </form>
+
+    </main>
+</body>
+</html>
